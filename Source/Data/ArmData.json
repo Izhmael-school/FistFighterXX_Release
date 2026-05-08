@@ -1,0 +1,66 @@
+[
+  {
+    "armID": 0,
+    "atkValue": 15,
+    "spdValue": 1500,
+    "cStmValue": 1,
+    "maxDurability": 1,
+    "strength": 1,
+    "modelFileName": "Punch",
+    "armName": "パンチ",
+    "tips": "オーソドックスなウデ。",
+    "tips2" :  "なし"
+  },
+
+  {
+    "armID": 1,
+    "atkValue": 10,
+    "spdValue": 1600,
+    "cStmValue": 1,
+    "maxDurability": 1,
+    "strength": 1,
+    "modelFileName": "Drill",
+    "armName": "ドリル",
+    "tips": "壁貫通で直接攻撃！",
+    "tips2": "壁貫通"
+  },
+
+  {
+    "armID": 2,
+    "atkValue": 30,
+    "spdValue": 1000,
+    "cStmValue": 2,
+    "maxDurability": 2,
+    "strength": 2,
+    "modelFileName": "MorningStar",
+    "armName": "スター",
+    "tips": "一撃高火力のロマン砲！",
+    "tips2": "なし"
+  },
+
+  {
+    "armID": 3,
+    "atkValue": 25,
+    "spdValue": 800,
+    "cStmValue": 3,
+    "maxDurability": 2,
+    "strength": 2,
+    "modelFileName": "Bomb",
+    "armName": "ボム",
+    "tips": "範囲ダメージで一網打尽！",
+    "tips2": "広範囲ダメージ"
+  },
+
+  {
+    "armID": 4,
+    "atkValue": 1,
+    "spdValue": 1700,
+    "cStmValue": 1,
+    "maxDurability": 1,
+    "strength": 0,
+    "modelFileName": "Cutter",
+    "armName": "カッター",
+    "tips": "連続攻撃で切り裂け！",
+    "tips2": "連続攻撃"
+  }
+]

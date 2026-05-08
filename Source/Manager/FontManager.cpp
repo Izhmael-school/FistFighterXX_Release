@@ -1,0 +1,57 @@
+#include "FontManager.h"
+
+FontManager::FontManager() {
+	//フォントの追加
+	AddFontResourceEx("Res/Font/ReggaeOne-Regular.ttf", FR_PRIVATE, NULL);
+	CreateFontData("Reggae One", -1, -1, DX_FONTTYPE_NORMAL, "MainFont");
+	CreateFontData("Reggae One", 50, 4, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, "MainFont_Bold");
+	CreateFontData("Reggae One", 30, 4, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, "TipsFont_Name");
+	CreateFontData("Reggae One", 50, 4, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, "TipsFont_Text");
+	CreateFontData("Reggae One", 40, 3, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, "StatusFont_Name");
+	CreateFontData("Reggae One", 25, 2, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, "StatusFont_Text");
+	CreateFontData("Reggae One", 75, 6, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, "Super_Bold");
+}
+
+FontManager::~FontManager() {
+}
+
+
+void FontManager::CreateFontData(std::string fontName, int size, int thick, int fontType, std::string anyFontName) {
+	FontData data;
+
+	// ハンドルの作成
+	int f = CreateFontToHandle(fontName.c_str(), size, thick, fontType);
+
+	// 失敗なら帰る
+	if (f == -1) return;
+
+	data.fontHandle = f;
+
+	if (anyFontName == "")
+		data.fontName = fontName;
+	else
+		data.fontName = anyFontName;
+
+	// 配列に入れる
+	fontDataArray.push_back(data);
+}
+
+int FontManager::UseFontHandle(std::string _fontName) {
+	for (auto f : fontDataArray) {
+		if (f.fontName != _fontName) continue;
+
+		return f.fontHandle;
+	}
+
+	return -1;
+}
+
+void FontManager::DeleteFont() {
+
+	for (auto f : fontDataArray) {
+		DeleteFontToHandle(f.fontHandle);
+	}
+
+	fontDataArray.clear();
+	fontDataArray.shrink_to_fit();
+}
