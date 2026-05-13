@@ -15,11 +15,11 @@ void ArmManager::Start() {
 	AudioUtility::Load(MyString::MergeString(SE_FILEPATH, "StarHit", AUDIO_EXTENSION), "HitStar", false);
 	AudioUtility::Load(MyString::MergeString(SE_FILEPATH, "BombHit", AUDIO_EXTENSION), "HitBomb", false);
 	AudioUtility::Load(MyString::MergeString(SE_FILEPATH, "CutterHit", AUDIO_EXTENSION), "HitCutter", false);
-	EffectUtility::Load("res/Model/Effect/PunchHit.efkefc", "HitPunch",75.0f);
-	EffectUtility::Load("res/Model/Effect/DrillHit.efkefc", "HitDrill",50.0f);
-	EffectUtility::Load("res/Model/Effect/StarHit.efkefc", "HitStar",75.0f);
-	EffectUtility::Load("res/Model/Effect/BombHit.efkefc", "HitBomb",50.0f);
-	EffectUtility::Load("res/Model/Effect/CutterHit.efkefc", "HitCutter",50.0f);
+	EffectUtility::Load("res/Model/Effect/PunchHit.efkefc", "HitPunch", 75.0f);
+	EffectUtility::Load("res/Model/Effect/DrillHit.efkefc", "HitDrill", 50.0f);
+	EffectUtility::Load("res/Model/Effect/StarHit.efkefc", "HitStar", 75.0f);
+	EffectUtility::Load("res/Model/Effect/BombHit.efkefc", "HitBomb", 50.0f);
+	EffectUtility::Load("res/Model/Effect/CutterHit.efkefc", "HitCutter", 50.0f);
 	armImage[Punch] = LoadGraph(MyString::MergeString(ARM_SPRITE_PATH, "Punch", SPRITE_EXTENSION).c_str());
 	armImage[Drill] = LoadGraph(MyString::MergeString(ARM_SPRITE_PATH, "Drill", SPRITE_EXTENSION).c_str());
 	armImage[Star] = LoadGraph(MyString::MergeString(ARM_SPRITE_PATH, "MorningStar", SPRITE_EXTENSION).c_str());
@@ -35,7 +35,7 @@ void ArmManager::DeleteData() {
 	}
 }
 
-void ArmManager::UnuseArm(std::shared_ptr<ArmBase>& _arm) {
+void ArmManager::UnuseArm(ArmBase* _arm) {
 
 	if (!_arm) return;
 
@@ -43,25 +43,40 @@ void ArmManager::UnuseArm(std::shared_ptr<ArmBase>& _arm) {
 
 	ArmType _type = _arm->GetArmType();
 
-	unuseArmArray[_type].push_back(std::move(_arm));
+	// 探す
+	auto itr = std::find_if(
+		useArmArray[_type].begin(),
+		useArmArray[_type].end(),
+		[_arm](const std::unique_ptr<ArmBase>& a) {
+			return a.get() == _arm;
+		});
+
+	if (itr == useArmArray[_type].end()) return;
+
+	unuseArmArray[_type].push_back(std::move(*itr));
+
+	useArmArray[_type].erase(itr);
+
+	_arm = nullptr;
 }
 
-std::shared_ptr<ArmBase> ArmManager::UseArm(ArmType _type, Player* _owner, ArmPos pos, std::string _attachFrameName) {
+ArmBase* ArmManager::UseArm(ArmType _type, Player* _owner, ArmPos pos, std::string _attachFrameName) {
 	if (_type == ArmTypeMax) {
 		assert(_type == ArmTypeMax);
 		return nullptr;
 	}
 
-	std::shared_ptr<ArmBase> arm;
+	ArmBase* arm = nullptr;
 	// 無ければ作る
 	if (unuseArmArray[_type].size() == 0)
-		arm = generator->CreateArm(_type,_owner);
-	else {
-		// ウデの取得
-		arm = std::move(unuseArmArray[_type].back());
-		unuseArmArray[_type].pop_back();
-		arm->SetOwner(_owner);
-	}
+		unuseArmArray[_type].push_back(generator->CreateArm(_type, _owner));
+
+	// ウデの取得
+	useArmArray[_type].push_back(std::move(unuseArmArray[_type].back()));
+	unuseArmArray[_type].pop_back();
+
+	arm = useArmArray[_type].back().get();
+	arm->SetOwner(_owner);
 
 	arm->ArmAttach(_attachFrameName);
 	arm->SetArmPos(pos);

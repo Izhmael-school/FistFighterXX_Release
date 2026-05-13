@@ -80,3 +80,28 @@ void UIManager::SetActiveUI(SceneState _drawScene, UITag _tag, bool _isActive) {
 		ui->SetActive(_isActive);
 	}
 }
+
+UIBase* UIManager::GetUIByID(int _id)
+{
+	for(auto& scene : uiArray) {
+		for(auto& ui : scene) {
+			if(ui->GetID() == _id) {
+				return ui.get();
+			}
+		}
+	}
+	return nullptr;
+}
+
+void UIManager::DeleteUIByID(int _id)
+{
+	for(auto& scene : uiArray) {
+		auto it = std::remove_if(scene.begin(), scene.end(), [_id](std::unique_ptr<UIBase>& ui) {
+			return ui->GetID() == _id;
+		});
+		if (it != scene.end()) {
+			scene.erase(it, scene.end());
+			return;
+		}
+	}
+}

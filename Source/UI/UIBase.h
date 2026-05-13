@@ -16,7 +16,11 @@ public:
 	inline float GetY() const { return y; }
 
 	inline UITag GetTag() const { return tag; }
+
+	inline int GetID() const { return id; }
 protected:
+	int id;
+	static int idCounter;
 	float x , y , w , h;
 	bool isActive;
 

@@ -19,10 +19,15 @@ void ArmEffectBase::ArmHit(ArmBase* _target, ArmBase* _this) {
 	if (_target->GetOwner() == _this->GetOwner() || !_target->IsShot() || !_this->IsShot()) return;
 
 	_target->SubDurability(_this->GetStrength());
+	_this->SubDurability(_target->GetStrength());
 
-	if (_target->GetCurrentDurability() > 0) return;
+	if (_target->GetCurrentDurability() <= 0)
 	// 耐久力が無くなったらショットを終わらす
 	_target->ShotEnd();
+
+	if (_this->GetCurrentDurability() <= 0)
+	// 耐久力が無くなったらショットを終わらす
+	_this->ShotEnd();
 }
 
 void ArmEffectBase::WallHit(ArmBase* _this, Collider* _wall) {

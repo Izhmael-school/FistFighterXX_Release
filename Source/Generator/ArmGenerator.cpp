@@ -52,7 +52,7 @@ void ArmGenerator::LoadArmModel() {
 	}
 }
 
-std::shared_ptr<ArmBase> ArmGenerator::CreateArm(ArmType _type, Player* _owner) {
+std::unique_ptr<ArmBase> ArmGenerator::CreateArm(ArmType _type, Player* _owner) {
 	if (_type == ArmTypeMax) return nullptr;
 
 	// データがなければ読み込む
@@ -66,7 +66,7 @@ std::shared_ptr<ArmBase> ArmGenerator::CreateArm(ArmType _type, Player* _owner) 
 	std::unique_ptr<ArmEffectBase> effect = ReturnEffect(_type);
 
 	// ウデの生成
-	std::shared_ptr<ArmBase> cArm = std::make_shared<ArmBase>(mHandle, VZero,_owner, std::move(effect));
+	std::unique_ptr<ArmBase> cArm = std::make_unique<ArmBase>(mHandle, VZero,_owner, std::move(effect));
 
 	// ステータスの読み込み
 	auto data = armData[_type];

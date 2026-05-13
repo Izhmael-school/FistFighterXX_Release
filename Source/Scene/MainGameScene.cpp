@@ -351,6 +351,7 @@ void MainGameScene::Teardown() {
 	PlayerUtility::UnuseAllPlayer();
 	ItemUtility::UnuseAll();
 	AudioUtility::Stop(currentBGMName);
+	EffectUtility::DeleteAllEffect();
 }
 
 void MainGameScene::DeleteData() {}

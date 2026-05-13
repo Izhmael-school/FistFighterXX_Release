@@ -21,7 +21,7 @@ public:
 	void LoadArmModel();
 
 	// ¶¬
-	std::shared_ptr<ArmBase> CreateArm(ArmType _type,Player* _owner);
+	std::unique_ptr<ArmBase> CreateArm(ArmType _type,Player* _owner);
 
 	// ƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹‚Ìíœ
 	void DeleteOriginModelHandle();

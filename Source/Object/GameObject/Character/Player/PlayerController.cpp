@@ -72,7 +72,7 @@ void PlayerController::Move() {
 
 	// Œ‚‚Á‚Ä‚È‚¢˜r‚Ì‰ñ“]
 	for (int i = 0; i < ArmMax; i++) {
-		ArmBase* arm = owner->GetArm(static_cast<ArmPos>(i)).get();
+		ArmBase* arm = owner->GetArm(static_cast<ArmPos>(i));
 		if (arm->IsShot()) continue;
 
 		arm->GetController().Move_NoShot(dir, rotateSpeed);

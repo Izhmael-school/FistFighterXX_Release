@@ -36,6 +36,10 @@ public:
 	void DeleteAllUIToTag(SceneState _drawScene, UITag _tag);
 	// ƒ^ƒOw’è‚Å‚·‚×‚Ä‚ÌUI‚Ìó‘Ô‚ğ•Ï‚¦‚é
 	void SetActiveUI(SceneState _drawScene, UITag _tag,bool _isAtive);
+
+	UIBase* GetUIByID(int _id);
+
+	void DeleteUIByID(int _id);
 private:
 	std::vector<std::vector<std::unique_ptr<UIBase>>> uiArray;
 };

@@ -68,11 +68,15 @@ void ArmBase::Render() {
 
 void ArmBase::Setup() {
 	isShot = false;
+	controller.SetOwner(this);
+	controller.SetPortNum(owner->GetPortNum());
 }
 
 void ArmBase::Teardown() {
 	pCollider->SetActive(false);
 	isShot = false;
+	SetOwner(nullptr);
+	SetPortNum(-1);
 }
 
 void ArmBase::ShotStart() {

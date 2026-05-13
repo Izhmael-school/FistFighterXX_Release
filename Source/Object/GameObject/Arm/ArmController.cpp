@@ -18,36 +18,36 @@ void ArmController::Move() {
 	MyVECTOR::ChangeElementXY(stick);
 	stick.y *= -1;
 
-    // 常に前方方向へ進む（ロケットパンチ挙動）に、入力は補助的に加える
+    // ロケットパンチ
     float delta = TimeUtility::GetDeltaTime();
 	float baseSpeed = owner->GetMoveSpeed();
 
-    float inputInfluence = 1.0f; // 入力による移動の重み（0..1）
+    float inputInfluence = 1.0f; // 入力による移動の影響度
 
-	// 発射直後のブースト（最初だけ推進力を上げる）
-	const float boostDuration = 0.125f; // 秒（短縮）
-	const float boostMultiplier = 2.5f; // 直後のスピード倍率
+	// 発射直後ブースト
+	const float boostDuration = 0.125f; 
+	const float boostMultiplier = 2.5f;
 	float forwardSpeedMultiplier = 1.0f;
 
 	if (owner->IsShot() && owner->GetShotTime() < boostDuration) {
 		forwardSpeedMultiplier = boostMultiplier;
 	}
 
-	// オーナーの向き（Y回転）から前方ベクトルを作成
+	// 前方ベクトルを作成
 	float currentYaw = MyMath::Deg2Rad(owner->GetRotation().y);
 	VECTOR forward = VGet(sinf(currentYaw), 0.0f , cosf(currentYaw));
 
-    // 発射直後のみ前方ブーストを与える（それ以外は前方移動しない）
+    // 発射直後のみ前方ブースト
 	VECTOR forwardMove = VGet(0.0f, 0.0f, 0.0f);
 	if (owner->IsShot() && owner->GetShotTime() < boostDuration) {
 		forwardMove = VScale(forward, delta * baseSpeed * forwardSpeedMultiplier);
 		inputInfluence = 0.3f;
 	}
 
-	// 入力に基づく移動（補助）
+	// 入力に基づく移動
 	VECTOR inputMove = VScale(stick, delta * baseSpeed * inputInfluence);
 
-	// 合成移動ベクトル（XY平面）
+	// 合成移動ベクトル
 	VECTOR moveDir = VAdd(forwardMove, inputMove);
 
 	// 座標系に合わせて z/y の入れ替え
@@ -68,7 +68,6 @@ void ArmController::Move() {
 	while (diff > DX_PI_F) diff -= DX_TWO_PI_F;
 	while (diff < -DX_PI_F) diff += DX_TWO_PI_F;
 
-    // 回転速度は deg/sec 指定で扱い、デルタ時間でフレーム当たりのラジアン上限に変換する
     const float maxRotateDegPerSec = 720.0f; // deg/sec
 	float rotateSpeed = MyMath::Deg2Rad(maxRotateDegPerSec); // rad/frame
 	diff = std::clamp(diff, -rotateSpeed, rotateSpeed);
@@ -79,7 +78,6 @@ void ArmController::Move() {
 }
 
 void ArmController::Move_NoShot(VECTOR _dir, float _rotateSpeed) {
-  // _rotateSpeed は度/秒で渡される想定にして、デルタ時間でスケーリングして使用する
 	float delta = TimeUtility::GetDeltaTime();
 	float dirYaw = atan2f(_dir.x, _dir.y);
 	float currentYaw = MyMath::Deg2Rad(owner->GetRotation().y);
@@ -88,7 +86,6 @@ void ArmController::Move_NoShot(VECTOR _dir, float _rotateSpeed) {
 	while (diff > DX_PI_F) diff -= DX_TWO_PI_F;
 	while (diff < -DX_PI_F) diff += DX_TWO_PI_F;
 
- // 既存コードでは _rotateSpeed はラジアンでの上限値として渡されるため、そのまま使用する
 	float rotateSpeed = _rotateSpeed;
 	diff = std::clamp(diff, -rotateSpeed, rotateSpeed);
 

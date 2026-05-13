@@ -74,7 +74,7 @@ void EffectManager::Update() {
 		if (_pE->IsActive()) return false;
 
 		_pE.reset();
-		return true; 
+		return true;
 		});
 
 	UpdateEffekseer3D();
@@ -88,6 +88,16 @@ void EffectManager::Render() {
 		pEffe->Render();
 	}
 	DrawEffekseer3D();
+}
+
+void EffectManager::DeleteAllEffect(){
+	for (auto& pEffe : pEffectList) {
+		if (pEffe != nullptr) {
+			pEffe.reset();
+			pEffe = nullptr;
+		}
+	}
+	pEffectList.clear();
 }
 
 void EffectManager::DeleteData() {

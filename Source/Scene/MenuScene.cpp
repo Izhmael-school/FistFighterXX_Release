@@ -314,7 +314,7 @@ void MenuScene::DrawArmStatus() {
 }
 
 void MenuScene::DrawArmStatusWindow(int index, bool isLeft) {
-	int x = (isLeft ? 550 : 150) + (index % 2 == 0 ? 960 : 0);
+	int x = (isLeft ? 550 : 150) + (index % 2 != 0 ? 960 : 0);
 	int y = 100 + (index > 1 ? 540 : 0);
 
 	int windowWidth = 300;

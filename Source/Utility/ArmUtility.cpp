@@ -1,11 +1,11 @@
 #include "ArmUtility.h"
+#include "../Object/GameObject/Arm/ArmBase.h"
 
-
-void ArmUtility::UnuseArm(std::shared_ptr<ArmBase> _arm) {
+void ArmUtility::UnuseArm(ArmBase* _arm) {
     ArmManager::GetInstance().UnuseArm(_arm);
 }
 
-std::shared_ptr<ArmBase> ArmUtility::UseArm(ArmType _type, Player* _owner, ArmPos pos, std::string _attachFrameName) {
+ArmBase* ArmUtility::UseArm(ArmType _type, Player* _owner, ArmPos pos, std::string _attachFrameName) {
     return ArmManager::GetInstance().UseArm(_type,_owner, pos,_attachFrameName);
 }
 

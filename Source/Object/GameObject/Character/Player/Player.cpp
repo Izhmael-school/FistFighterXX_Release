@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "../../Arm/ArmBase.h"
 #include "../../../../Utility/ArmUtility.h"
+#include "../../../../Utility/EffectUtility.h"
 #include "../../../../Component/Collider.h"
 #include "../../../../Manager/UIManager.h"
 #include "../../../../UI/Gauge/Gauge.h"
@@ -95,8 +96,7 @@ void Player::Setup() {
 	useDeadExecute = false;
 	SetVisible(true);
 	pCollider->SetActive(true);
-	ChangeArm(Left, Star);
-	ChangeArm(Right, Cutter);
+
 	VECTOR gaugePos = PLAYER_GAUGE_POS[playerNumber - 1];
 	auto hpbar = UIManager::GetInstance().CreateUIGauge(MainGame, gaugePos.x, gaugePos.y, PLAYER_GAUGE_WIDTH, PLAYER_GAUGE_HEIGHT, PlayerGauge);
 	hpbar->SetGetterFunc(
@@ -107,6 +107,8 @@ void Player::Setup() {
 	moveHPBar->SetGetterFunc(
 		[this]() {return GetCurrentHP(); },
 		[this]() {return GetMaxHP(); });
+
+	moveUIIDArray.push_back(moveHPBar->GetID());
 
 	auto staminaBar = UIManager::GetInstance().CreateUIGauge(MainGame, gaugePos.x, gaugePos.y + PLAYER_GAUGE_HEIGHT, PLAYER_GAUGE_WIDTH, PLAYER_GAUGE_HEIGHT, PlayerGauge, false);
 	staminaBar->SetGetterFunc(
@@ -120,6 +122,7 @@ void Player::Setup() {
 		[this]() {return GetCurrentStamina(); },
 		[this]() {return GetMaxStamina(); });
 	moveStaminaBar->ChangeColor(yellow, gray, black, black);
+	moveUIIDArray.push_back(moveStaminaBar->GetID());
 }
 
 void Player::Teardown() {
@@ -127,6 +130,13 @@ void Player::Teardown() {
 	pCollider->SetActive(false);
 	ArmUtility::UnuseArm(equipArm[Left]);
 	ArmUtility::UnuseArm(equipArm[Right]);
+	equipArm[Right] = nullptr;
+	equipArm[Left] = nullptr;
+	for (int id : moveUIIDArray) {
+		UIManager::GetInstance().DeleteUIByID(id);
+	}
+
+	EffectUtility::Instantiate("HitBomb", GetPosition());
 }
 
 void Player::SetPortNum(int _portNum) {
@@ -140,8 +150,7 @@ void Player::SetPortNum(int _portNum) {
 }
 
 void Player::ChangeArm(ArmPos _armPos, ArmType _type) {
-	if (equipArm) {
-
+	if (equipArm[_armPos]) {
 		ArmUtility::UnuseArm(equipArm[_armPos]);
 	}
 	equipArm[_armPos] = ArmUtility::UseArm(_type, this, _armPos, std::string(attachFrameName[_armPos]));

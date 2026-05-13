@@ -29,14 +29,15 @@ public:
 	~ArmManager() = default;
 
 	void DeleteData() override;
-	void UnuseArm(std::shared_ptr<ArmBase>& _arm);
-	std::shared_ptr<ArmBase> UseArm(ArmType _type,Player* _owner, ArmPos pos, std::string _attachFrameName);
+	void UnuseArm(ArmBase* _arm);
+	ArmBase* UseArm(ArmType _type,Player* _owner, ArmPos pos, std::string _attachFrameName);
 
 	int GetArmGraphHandle(ArmType _arm);
 
 	ArmData GetArmData(int _armID);
 private:
-	std::array<std::vector<std::shared_ptr<ArmBase>>,ArmTypeMax> unuseArmArray;
+	std::array<std::vector<std::unique_ptr<ArmBase>>,ArmTypeMax> unuseArmArray;
+	std::array<std::vector<std::unique_ptr<ArmBase>>,ArmTypeMax> useArmArray;
 	std::array<int, ArmTypeMax> armImage;
 	std::unique_ptr<ArmGenerator> generator;
 };

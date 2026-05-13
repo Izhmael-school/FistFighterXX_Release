@@ -39,6 +39,8 @@ public:
 
 	void Render() override;
 
+	void DeleteAllEffect();
+
 	void DeleteData() override;
 
 };

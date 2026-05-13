@@ -10,9 +10,9 @@ class Player;
 class ArmUtility {
 public:
 	// ウデの未使用化
-	static void UnuseArm(std::shared_ptr<ArmBase> _arm);
+	static void UnuseArm(ArmBase* _arm);
 	// ウデの取得
-	static std::shared_ptr<ArmBase> UseArm(ArmType _type, Player* _owner, ArmPos pos, std::string _attachFrameName);
+	static ArmBase* UseArm(ArmType _type, Player* _owner, ArmPos pos, std::string _attachFrameName);
 
 	static int GetArmGraphHandle(ArmType _arm);
 

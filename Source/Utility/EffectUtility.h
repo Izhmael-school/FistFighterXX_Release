@@ -15,5 +15,7 @@ public:
 	static void Render();
 
 	static void DeleteData();
+
+	static void DeleteAllEffect();	
 };
 

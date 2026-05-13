@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <string_view>
 #include "../../../../Other/Utility/Span.h"
+#include <vector>
 
 class ArmBase;
 constexpr std::string_view attachFrameName[ArmMax] = { "RightArmPoint" , "LeftArmPoint" };
@@ -42,7 +43,7 @@ public:
 
 	inline int GetShotNum() const { return shotNum; }
 
-	inline std::shared_ptr<ArmBase> GetArm(ArmPos _pos) const { return equipArm[_pos]; }
+	inline ArmBase* GetArm(ArmPos _pos) { return equipArm[_pos]; }
 
 	bool IsDead() const { return status.currentHP <= 0; }
 	void DeadExecute();
@@ -76,7 +77,7 @@ public:
 private:
 	PlayerStatus status;
 	float moveSpeed;
-	std::shared_ptr<ArmBase> equipArm[ArmMax];
+	ArmBase* equipArm[ArmMax];
 	int shotNum;
 
 	int playerNumber;
@@ -85,6 +86,8 @@ private:
 	Span healStamina;
 	Span consumeStamina;
 	unsigned int matColor;
+	std::vector<int> moveUIIDArray;
+
 public:
 	PlayerController controller;
 };
